@@ -13,7 +13,7 @@ pub mod middleware;
 mod tests {
     use std::env;
 
-    use crate::totp::generate_totp;
+    use crate::{totp::generate_totp, stock::list::{StockListRequest, StockListFilter, StockListSortBy}};
 
     #[test]
     fn totp() {
@@ -35,14 +35,27 @@ mod tests {
         let credentials = super::client::Credentials {
             username: String::from(username),
             password: String::from(password),
+            totp_secret: String::from(totp_secret)
         };
 
-        let client = super::client::Client::authenticate(&credentials, &totp_secret)
+        let client = super::client::Client::authenticate(&credentials)
             .await
             .expect("Auth failed");
 
-        let accounts = client.list_accounts().await.expect("List accounts failed");
+        let request = StockListRequest {
+            filter: StockListFilter {
+                country_codes: vec![String::from("SE")]
+            },
+            limit: 20,
+            offset: 0,
+            sort_by: StockListSortBy {
+                field: String::from("name"),
+                order: String::from("desc")
+            }
+        };
 
-        println!("{}", serde_json::to_string(&accounts).unwrap());
+        let stocks = client.get_stock_list(&request).await.expect("could not get stocklist");
+
+        println!("{}", serde_json::to_string(&stocks).expect("could not json ser."));
     }
 }

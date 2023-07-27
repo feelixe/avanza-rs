@@ -12,6 +12,7 @@ use surf::Client as SurfClient;
 pub struct Credentials {
     pub username: String,
     pub password: String,
+    pub totp_secret: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -49,10 +50,11 @@ pub struct UserCredentialsResponse {
     pub two_factor_login: TwoFactorLogin,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Session {
-    pub user: SessionUser,
+pub struct UserCredentialsRequest {
+    pub username: String,
+    pub password: String,
 }
 
 pub struct Client {
@@ -61,24 +63,26 @@ pub struct Client {
 }
 
 impl Client {
-    pub async fn authenticate(
-        credentials: &Credentials,
-        totp_secret: &str,
-    ) -> Result<Client, error::Error> {
+    pub async fn authenticate(credentials: &Credentials) -> Result<Client, error::Error> {
         // Create default config.
         let config = Configuration::default();
 
         // Send initial auth request with username and password.
         let user_credentials_response = surf::post(config.urls.authenticate.as_str())
-            .body_json(&credentials)?
+            .middleware(ErrorForStatus)
+            .body_json(&UserCredentialsRequest {
+                username: credentials.username.clone(),
+                password: credentials.password.clone()
+            })?
             .recv_json::<UserCredentialsResponse>()
             .await?;
 
         // Generate a totp code.
-        let totp_code = totp::generate_totp(totp_secret);
+        let totp_code = totp::generate_totp(&credentials.totp_secret);
 
         // Send totp code and transaction id as cookie.
         let mut totp_response = surf::post(config.urls.totp.as_str())
+            .middleware(ErrorForStatus)
             .header(
                 "cookie",
                 format!(

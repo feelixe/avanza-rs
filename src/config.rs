@@ -7,6 +7,7 @@ pub struct Urls {
     pub accounts: String,
     pub fund_buy: String,
     pub stock_order: String,
+    pub stock_list: String,
 }
 
 #[derive(Debug, Clone)]
@@ -20,6 +21,7 @@ impl Default for Configuration {
             urls: Urls {
                 fund_buy: String::from("https://www.avanza.se/_api/fund-guide/fund-order-page/buy"),
                 stock_order: String::from("https://www.avanza.se/_api/trading-critical/rest/order/new"),
+                stock_list: String::from("https://www.avanza.se/_api/market-stock-filter/stocks"),
                 authenticate: String::from("https://www.avanza.se/_api/authentication/sessions/usercredentials"),
                 totp: String::from("https://www.avanza.se/_api/authentication/sessions/totp"),
                 get_session: String::from("https://www.avanza.se/_cqbe/authentication/session"),

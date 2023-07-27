@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::{account::Account, client::Client, error::Error};
+use crate::{client::Client, error::Error};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -35,22 +35,15 @@ impl Into<StockOrderResponse> for StockOrderUnknownResponse {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct StockOrderRequest {
-    pub orderbook_id: String,
-    pub account_id: String,
-    pub price: f64,
-    pub volume: u32,
-    pub side: String,
-}
-
 pub struct StockOrder {
     pub orderbook_id: String,
-    pub account: Account,
+    pub account_id: String,
     pub price: f64,
     pub volume: u32,
     pub side: Side,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub enum Side {
     BUY,
     SELL,
@@ -70,17 +63,10 @@ impl Client {
         &self,
         order: &StockOrder,
     ) -> Result<StockOrderResponse, Error> {
-        let order_request = StockOrderRequest {
-            orderbook_id: order.orderbook_id.clone(),
-            account_id: order.account.id.clone(),
-            volume: order.volume,
-            price: order.price,
-            side: order.side.to_string(),
-        };
         let res = self
             .http_client
             .post(&self.config.urls.stock_order)
-            .body_json(&order_request)?
+            .body_json(&order)?
             .recv_json::<StockOrderUnknownResponse>()
             .await?;
 
