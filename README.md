@@ -39,4 +39,6 @@ let result = client.new_stock_order(&stock_order).await?;
 2. Click "Aktivera" on the next screen.
 3. Select "Annan app för tvåfaktorsinloggning".
 4. Click "Kan du inte scanna QR-koden?" to reveal your TOTP Secret.
-5. 
+5. Install crate totp with `cargo install totp`.
+6. Run `totp <TOTP_SECERT>` and enter the 6 digit code on Avanza.
+7. Done, save you're `<TOTP_SECERT>` to `.env`
