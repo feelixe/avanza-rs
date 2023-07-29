@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
-pub mod get;
-pub mod list;
+pub(crate) mod get;
+pub(crate) mod list;
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]

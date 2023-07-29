@@ -1,7 +1,7 @@
 use surf::{middleware::Middleware, middleware::Next, Client, Request, Response};
 
 #[derive(Debug)]
-pub struct ErrorForStatus;
+pub(crate) struct ErrorForStatus;
 
 #[surf::utils::async_trait]
 impl Middleware for ErrorForStatus {

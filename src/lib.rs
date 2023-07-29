@@ -1,19 +1,34 @@
-pub mod account;
-pub mod client;
-pub mod char_encode;
-pub mod config;
-pub mod error;
-pub mod fund;
-pub mod position;
-pub mod totp;
-pub mod stock;
-pub mod middleware;
+mod account;
+mod char_encode;
+mod client;
+mod config;
+mod error;
+mod fund;
+mod middleware;
+mod position;
+mod stock;
+mod totp;
+
+pub use account::list::AccountListResponse;
+pub use account::Account;
+pub use client::Client;
+pub use config::{Configuration, Urls};
+pub use error::Error;
+pub use fund::buy::{FundBuyRequest, FundBuyResponse};
+pub use position::total_values::{Aggegated, TotalValue, TotalValuesResponse};
+pub use stock::list::{
+    Instrument, StockListFilter,
+    StockListRequest, StockListResponse, StockListResponsePagination, StockListSortBy
+};
 
 #[cfg(test)]
 mod tests {
     use std::env;
 
-    use crate::{totp::generate_totp, stock::list::{StockListRequest, StockListFilter, StockListSortBy}};
+    use crate::{
+        stock::list::{StockListFilter, StockListRequest, StockListSortBy},
+        totp::generate_totp,
+    };
 
     #[test]
     fn totp() {
@@ -35,7 +50,7 @@ mod tests {
         let credentials = super::client::Credentials {
             username: String::from(username),
             password: String::from(password),
-            totp_secret: String::from(totp_secret)
+            totp_secret: String::from(totp_secret),
         };
 
         let client = super::client::Client::authenticate(&credentials)
@@ -44,17 +59,20 @@ mod tests {
 
         let request = StockListRequest {
             filter: StockListFilter {
-                country_codes: vec![String::from("SE")]
+                country_codes: vec![String::from("SE")],
             },
             limit: 20,
             offset: 0,
             sort_by: StockListSortBy {
                 field: String::from("name"),
-                order: String::from("desc")
-            }
+                order: String::from("desc"),
+            },
         };
 
-        let stocks = client.get_stock_list(&request).await.expect("could not get stocklist");
+        let stocks = client
+            .get_stock_list(&request)
+            .await
+            .expect("could not get stocklist");
 
         println!("{:#?}", stocks);
     }

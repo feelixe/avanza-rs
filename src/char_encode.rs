@@ -1,4 +1,4 @@
-pub fn char_encode(num: u32) -> String {
+pub(crate) fn char_encode(num: u32) -> String {
     let mut s = String::new();
     let mut n = num;
     while n > 0 {
