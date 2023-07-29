@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{account::Account, char_encode::char_encode, error::Error};
 
-#[derive(Serialize, Debug)]
+#[derive(Debug, Serialize)]
 struct TotalValuesRequest(Vec<String>);
 
 #[derive(Debug, Deserialize)]

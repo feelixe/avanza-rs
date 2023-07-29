@@ -56,6 +56,6 @@ mod tests {
 
         let stocks = client.get_stock_list(&request).await.expect("could not get stocklist");
 
-        println!("{}", serde_json::to_string(&stocks).expect("could not json ser."));
+        println!("{:#?}", stocks);
     }
 }
