@@ -40,8 +40,17 @@ pub struct Instrument {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct StockListResponsePagination {
+    pub offset: u32,
+    pub limit: u32
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct StockListResponse {
     pub stocks: Vec<Instrument>,
+    pub total_number_of_orderbooks: u32,
+    pub pagination: StockListResponsePagination,
 }
 
 impl Client {
