@@ -17,8 +17,11 @@ pub use error::Error;
 pub use fund::buy::{FundBuyRequest, FundBuyResponse};
 pub use position::total_values::{Aggegated, TotalValue, TotalValuesResponse};
 pub use stock::list::{
-    Instrument, StockListFilter,
-    StockListRequest, StockListResponse, StockListResponsePagination, StockListSortBy
+    Instrument, StockListFilter, StockListRequest, StockListResponse, StockListResponsePagination,
+    StockListSortBy,
+};
+pub use stock::order::{
+    OrderRequestStatus, Side, StockOrder, StockOrderResponse, StockOrderUnknownResponse,
 };
 
 #[cfg(test)]
