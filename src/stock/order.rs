@@ -59,7 +59,7 @@ impl fmt::Display for Side {
 }
 
 impl Client {
-    pub async fn new_stock_order(
+    pub async fn execute_stock_order(
         &self,
         order: &StockOrder,
     ) -> Result<StockOrderResponse, Error> {
