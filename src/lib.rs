@@ -11,7 +11,7 @@ mod totp;
 
 pub use account::list::AccountListResponse;
 pub use account::Account;
-pub use client::Client;
+pub use client::{Client, Credentials};
 pub use config::{Configuration, Urls};
 pub use error::Error;
 pub use fund::buy::{FundBuyRequest, FundBuyResponse};
